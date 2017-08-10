@@ -17,6 +17,7 @@
 	clear();
 	clearCompleted();
 	tab();
+	edit();
 
 	//init
 	function init(){
@@ -48,7 +49,7 @@
 		str += '<label>' + data.content + '</label>';
 		str += '<button class="destroy"></button>';
 		str += '</div>';
-		str += '<input class="edit" value="Rule the web">';
+		str += '<input class="edit" value="">';
 		str += '</li>';
 
 		return $(str);
@@ -92,6 +93,7 @@
 		}
 		filters();
 		storeData();
+		edit();
 	}
 
 	//store data
@@ -171,6 +173,22 @@
 			$todoList.find("li").hide();
 			$todoList.find("li").filter(".completed").show();
 		}
+	}
+
+
+	//double click to edit a todo
+	function edit(){
+		$todoList.find("label").on("dblclick", function(){
+			$(this).hide();
+			$(this).parent().parent().find(".edit").show().val($(this).html());
+		});
+		$todoList.find(".edit").on("blur", function(){
+			var index = parseInt($(this).parent().data("index"));
+			$(this).hide();
+			$(this).parent().find("label").show();
+			taskList[index].content = $(this).val() ? $(this).val() : taskList[$(this).index()].content;
+			bind();
+		})
 	}
 
 })(window);
